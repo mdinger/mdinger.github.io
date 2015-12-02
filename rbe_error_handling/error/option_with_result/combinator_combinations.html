@@ -38,7 +38,7 @@
 
 
         
-    <div class="book" data-level="16.7.2" data-basepath="../.." data-revision="1449025529387">
+    <div class="book" data-level="16.7.2" data-basepath="../.." data-revision="1449086151750">
     
 
 <div class="book-summary">
@@ -2917,14 +2917,16 @@ use std::fs::File;
 
 type Result&lt;T&gt; = std::result::Result&lt;T, String&gt;;
 
-// Setup to make this work. Create two files with some info.
+// Setup to make this work. Create two files with some info. Ignore the
+// return values because we don&#39;t care about them here.
 fn setup() {
-    // Ignore the return value because we don&#39;t care about it.
-    let &#95; = File::create(&quot;a&quot;)
-        .and&#95;then(|mut file| file.write&#95;all(b&quot;grape&quot;));
+    File::create(&quot;a&quot;)
+        .and&#95;then(|mut file| file.write&#95;all(b&quot;grape&quot;))
+        .unwrap();
 
-    let &#95; = File::create(&quot;b&quot;)
-        .and&#95;then(|mut file| file.write&#95;all(b&quot;fruit&quot;));
+    File::create(&quot;b&quot;)
+        .and&#95;then(|mut file| file.write&#95;all(b&quot;fruit&quot;))
+        .unwrap();
 }
 
 // Get the data from each file with the data stored in a &#96;Result&#96;.
