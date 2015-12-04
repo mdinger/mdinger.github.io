@@ -38,7 +38,7 @@
 
 
         
-    <div class="book" data-level="16.10" data-basepath=".." data-revision="1449086151750">
+    <div class="book" data-level="16.10" data-basepath=".." data-revision="1449197711783">
     
 
 <div class="book-summary">
@@ -2957,22 +2957,22 @@ impl From&lt;ParseIntError&gt; for DoubleError {
 
 impl fmt::Display for DoubleError {
     fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
-        write!(f, &quot;Error: {}&quot;, match &#42;self {
-            DoubleError::EmptyVec =&gt; 
-                &quot;please use a vector with at least one element&quot;.to&#95;owned(),
-            DoubleError::Parse(ref e) =&gt; e.to&#95;string(),
-        })
+        match &#42;self {
+            DoubleError::EmptyVec =&gt;
+                write!(f, &quot;please use a vector with at least one element&quot;),
+            DoubleError::Parse(ref e) =&gt; e.fmt(f),
+        }
     }
 }
 
 impl error::Error for DoubleError {
     fn description(&amp;self) -&gt; &amp;str {
         match &#42;self {
-            // Trying to use &#96;Display&#96; here results in the string being immediately
-            // dropped which won&#39;t compile so we have to write out the phrase again.
-            DoubleError::EmptyVec =&gt; &quot;please use a vector with at least one element&quot;,
-            // This already impls &#96;Error&#96;, so defer to its implementation.
-            DoubleError::Parse(ref err) =&gt; err.description(),
+            // A very short description of the error. Doesn&#39;t need to be the
+            // same as &#96;Display&#96;.
+            DoubleError::EmptyVec =&gt; &quot;empty vectors not allowed&quot;,
+            // This already impls &#96;Error&#96;, so defer to its own implementation.
+            DoubleError::Parse(ref e) =&gt; e.description(),
         }
     }
 
@@ -2998,7 +2998,7 @@ fn double&#95;first(vec: Vec&lt;&amp;str&gt;) -&gt; Result&lt;i32&gt; {
 fn print(result: Result&lt;i32&gt;) {
     match result {
         Ok(n)  =&gt; println!(&quot;The first doubled is {}&quot;, n),
-        Err(e) =&gt; println!(&quot;{}&quot;, e),
+        Err(e) =&gt; println!(&quot;Error: {}&quot;, e),
     }
 }
 

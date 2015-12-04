@@ -38,7 +38,7 @@
 
 
         
-    <div class="book" data-level="16.5" data-basepath=".." data-revision="1449086151750">
+    <div class="book" data-level="16.5" data-basepath=".." data-revision="1449197711783">
     
 
 <div class="book-summary">
@@ -2936,7 +2936,7 @@ fn double&#95;number&#95;map(number&#95;str: &amp;str) -&gt; Result&lt;i32, Pars
 fn print(result: Result&lt;i32, ParseIntError&gt;) {
     match result {
         Ok(n)  =&gt; println!(&quot;n is {}&quot;, n),
-        Err(e) =&gt; println!(&quot;Error: {:?}&quot;, e),
+        Err(e) =&gt; println!(&quot;Error: {}&quot;, e),
     }
 }
 

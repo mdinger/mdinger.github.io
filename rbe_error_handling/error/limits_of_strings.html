@@ -38,7 +38,7 @@
 
 
         
-    <div class="book" data-level="16.8" data-basepath=".." data-revision="1449086151750">
+    <div class="book" data-level="16.8" data-basepath=".." data-revision="1449197711783">
     
 
 <div class="book-summary">
@@ -2951,16 +2951,19 @@ enum DoubleError {
 // How the type is displayed is completely separate from where the errors are generated.
 // We do not need to be concerned that the display style will clutter the complex logic
 // our utility requires. They are separate matters which are handled separately.
+//
+// We don&#39;t store extra info about the errors. If we had desired, for example, to state
+// which string failed to parse then we can&#39;t without modifying our types to carry that
+// information accordingly.
 impl fmt::Display for DoubleError {
     fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
-        write!(f, &quot;Error: {}&quot;, match &#42;self {
-            DoubleError::EmptyVec =&gt; 
-                &quot;please use a vector with at least one element&quot;.to&#95;owned(),
-            // We didn&#39;t store extra info about the error. If we had desired, for
-            // example, to state which string failed to parse then we can&#39;t without
-            // modifying our type to carry that information.
-            DoubleError::Parse(ref e) =&gt; e.to&#95;string(),
-        })
+        match &#42;self {
+            DoubleError::EmptyVec =&gt;
+                write!(f, &quot;please use a vector with at least one element&quot;),
+            // This is a wrapper so defer to the underlying types&#39; own implementation
+            // of &#96;fmt&#96;.
+            DoubleError::Parse(ref e) =&gt; e.fmt(f),
+        }
     }
 }
 
@@ -2977,7 +2980,7 @@ fn double&#95;first(vec: Vec&lt;&amp;str&gt;) -&gt; Result&lt;i32&gt; {
 fn print(result: Result&lt;i32&gt;) {
     match result {
         Ok(n)  =&gt; println!(&quot;The first doubled is {}&quot;, n),
-        Err(e) =&gt; println!(&quot;{}&quot;, e),
+        Err(e) =&gt; println!(&quot;Error: {}&quot;, e),
     }
 }
 
